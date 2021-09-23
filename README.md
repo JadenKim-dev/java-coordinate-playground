@@ -24,3 +24,13 @@ git checkout main // 기본 브랜치가 main인 경우
 git checkout -b 브랜치이름
 ex) git checkout -b apply-feedback
 ```
+
+--UI--
+[x] 좌표를 입력받는 로직
+[] 좌표를 잘못 입력했을 경우, 에러 문구 출력후 재입력하는 로직
+[] 두 점으로 좌표를 그리는 로직
+[] 두 점 사이의 거리를 출력하는 로직
+
+--비즈니스 로직--
+[] 좌표 값이 24 이내인지 검증하는 로직 (Value 안에 구현)
+[] 좌표 간 거리를 구하는 로직 (Coordinate 안에 구현)
