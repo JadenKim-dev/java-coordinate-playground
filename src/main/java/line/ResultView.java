@@ -1,5 +1,7 @@
 package line;
 
+import javax.xml.transform.Result;
+
 public class ResultView {
 
     private static final String LINE_SEPARATOR = System.lineSeparator();
@@ -9,16 +11,20 @@ public class ResultView {
     private static final String POINT = ".";
     private static final String DOUBLE_BLANK = "  ";
 
-    private final CoordinateDTO coordinate1;
-    private final CoordinateDTO coordinate2;
+    private final CoordinateDTO coordinateDTO1;
+    private final CoordinateDTO coordinateDTO2;
+    private final Coordinate coordinate1;
+    private final Coordinate coordinate2;
 
-    private ResultView(CoordinateDTO coordinateDTO1, CoordinateDTO coordinateDTO2) {
-        this.coordinate1 = coordinateDTO1;
-        this.coordinate2 = coordinateDTO2;
+    private ResultView(Coordinate coordinate1, Coordinate coordinate2) {
+        this.coordinateDTO1 = CoordinateDTO.from(coordinate1);
+        this.coordinateDTO2 = CoordinateDTO.from(coordinate2);
+        this.coordinate1 = coordinate1;
+        this.coordinate2 = coordinate2;
     }
 
-    public static ResultView newInstance(CoordinateDTO coordinateDTO1, CoordinateDTO coordinateDTO2) {
-        return new ResultView(coordinateDTO1, coordinateDTO2);
+    public static ResultView newInstance(Coordinate coordinate1, Coordinate coordinate2) {
+        return new ResultView(coordinate1, coordinate2);
     }
 
     public void printGraph() {
@@ -35,6 +41,13 @@ public class ResultView {
         System.out.println(sb);
     }
 
+    public void printLength() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("두 점 사이 거리는 ")
+                .append(String.format("%.6f", coordinate1.calculateLengthTo(coordinate2)));
+        System.out.println(sb);
+    }
+
     private void appendYAxis(StringBuilder sb, int y) {
         if(y %2 == 0) {
             sb.append(String.format("%2d", y));
@@ -45,19 +58,19 @@ public class ResultView {
 
     private void appendCoordinateOrPass(StringBuilder sb, int y) {
         StringBuilder tmpSb = new StringBuilder();
-        if(coordinate1.getY() == y && coordinate2.getY() == y) {
-            tmpSb.append(DOUBLE_BLANK.repeat(coordinate1.getX()))
+        if(coordinateDTO1.getY() == y && coordinateDTO2.getY() == y) {
+            tmpSb.append(DOUBLE_BLANK.repeat(coordinateDTO1.getX()))
                     .append(POINT);
             appendSecondCoordinateInSameY(tmpSb);
             sb.append(tmpSb).append(LINE_SEPARATOR);
             return;
         }
-        if(coordinate1.getY() == y) {
-            tmpSb.append(DOUBLE_BLANK.repeat(coordinate1.getX()))
+        if(coordinateDTO1.getY() == y) {
+            tmpSb.append(DOUBLE_BLANK.repeat(coordinateDTO1.getX()))
                     .append(".");
         }
-        if(coordinate2.getY() == y) {
-            tmpSb.append(DOUBLE_BLANK.repeat(coordinate2.getX()))
+        if(coordinateDTO2.getY() == y) {
+            tmpSb.append(DOUBLE_BLANK.repeat(coordinateDTO2.getX()))
                     .append(POINT);
         }
         sb.append(tmpSb).append(LINE_SEPARATOR);
@@ -70,11 +83,11 @@ public class ResultView {
     }
 
     private void appendSecondCoordinateInSameY(StringBuilder tmpSb) {
-        if(coordinate2.getX() < coordinate1.getX()) {
-            tmpSb.deleteCharAt(0).insert(coordinate2.getX()*2, POINT);
+        if(coordinateDTO2.getX() < coordinateDTO1.getX()) {
+            tmpSb.deleteCharAt(0).insert(coordinateDTO2.getX()*2, POINT);
             return;
         }
-        tmpSb.append("  ".repeat(coordinate1.getX()-coordinate2.getX()-1))
+        tmpSb.append("  ".repeat(coordinateDTO1.getX()- coordinateDTO2.getX()-1))
                 .append(" ").append(POINT);
     }
 }

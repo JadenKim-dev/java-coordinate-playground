@@ -21,11 +21,11 @@ public class Coordinate {
         );
     }
 
-    private Value getX() {
+    public Value getX() {
         return Value.copyOf(x);
     }
 
-    private Value getY() {
+    public Value getY() {
         return Value.copyOf(y);
     }
 }

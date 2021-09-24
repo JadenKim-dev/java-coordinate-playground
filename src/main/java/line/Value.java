@@ -29,4 +29,8 @@ public class Value {
     public int getDifferenceTo(Value otherValue) {
         return this.value - otherValue.value;
     }
+
+    int getValue() {
+        return value;
+    }
 }

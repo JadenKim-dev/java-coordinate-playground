@@ -56,6 +56,13 @@ public class CoordinateDTO {
         return coordinateDTOs;
     }
 
+    public static CoordinateDTO from(Coordinate coordinate) {
+        return new CoordinateDTO(
+                coordinate.getX().getValue(),
+                coordinate.getY().getValue()
+        );
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
