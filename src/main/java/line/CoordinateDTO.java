@@ -50,4 +50,13 @@ public class CoordinateDTO {
     public int getX() {
         return x;
     }
+
+    public boolean hasYOf(int value) {
+        return this.y == value;
+    }
+
+    public static List<CoordinateDTO> getCoordinateDTOListFrom(Coordinates coordinates) {
+        return coordinates.stream()
+                .map(CoordinateDTO::from).collect(Collectors.toList());
+    }
 }

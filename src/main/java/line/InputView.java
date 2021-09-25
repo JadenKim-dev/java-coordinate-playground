@@ -13,8 +13,12 @@ public class InputView {
         return new InputView();
     }
 
-    public String inputCoordinate() {
+    public String inputCoordinates() {
         System.out.println("좌표를 입력하세요.");
         return sc.nextLine();
+    }
+
+    public void printReinputMessage() {
+        System.out.println("좌표 입력이 올바르지 않습니다. 다시 입력해주세요.");
     }
 }

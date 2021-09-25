@@ -1,6 +1,7 @@
 package line;
 
-import javax.xml.transform.Result;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResultView {
 
@@ -11,44 +12,48 @@ public class ResultView {
     private static final String POINT = ".";
     private static final String DOUBLE_BLANK = "  ";
 
-    private final CoordinateDTO coordinateDTO1;
-    private final CoordinateDTO coordinateDTO2;
-    private final Coordinate coordinate1;
-    private final Coordinate coordinate2;
+    private final StringBuilder sb;
 
-    private ResultView(Coordinate coordinate1, Coordinate coordinate2) {
-        this.coordinateDTO1 = CoordinateDTO.from(coordinate1);
-        this.coordinateDTO2 = CoordinateDTO.from(coordinate2);
-        this.coordinate1 = coordinate1;
-        this.coordinate2 = coordinate2;
+    private ResultView() {
+        sb = new StringBuilder();
     }
 
-    public static ResultView newInstance(Coordinate coordinate1, Coordinate coordinate2) {
-        return new ResultView(coordinate1, coordinate2);
+    public static ResultView newInstance() {
+        return new ResultView();
     }
 
-    public void printGraph() {
-        StringBuilder sb = new StringBuilder();
-        for (int y = MAX_AXIS_VALUE; y > MIN_AXIS_VALUE; y--) {
-            appendYAxis(sb, y);
-            sb.append(Y_AXIS_LINE_UNIT);
-            appendCoordinateOrPass(sb, y);
-        }
-        sb.append("-".repeat(MAX_AXIS_VALUE*2)).append(LINE_SEPARATOR);
-        for (int x = MIN_AXIS_VALUE; x < MAX_AXIS_VALUE; x++) {
-            appendXAxis(sb, x);
-        }
+    public void printGraph(Coordinates coordinates) {
+
+        List<CoordinateDTO> coordinateDTOList = CoordinateDTO.getCoordinateDTOListFrom(coordinates);
+        appendYAxisAndCoordinatesToSb(coordinateDTOList);
+        appendXAxisToSb();
+
         System.out.println(sb);
     }
 
-    public void printLength() {
+    public void printLength(double length) {
         StringBuilder sb = new StringBuilder();
         sb.append("두 점 사이 거리는 ")
-                .append(String.format("%.6f", coordinate1.calculateLengthTo(coordinate2)));
+                .append(String.format("%.6f", length));
         System.out.println(sb);
     }
 
-    private void appendYAxis(StringBuilder sb, int y) {
+    private void appendYAxisAndCoordinatesToSb(List<CoordinateDTO> coordinateDTOList) {
+        for (int y = MAX_AXIS_VALUE; y > MIN_AXIS_VALUE; y--) {
+            appendYTicks(y);
+            sb.append(Y_AXIS_LINE_UNIT);
+            appendCoordinateOrPass(coordinateDTOList, y);
+        }
+    }
+
+    private void appendXAxisToSb() {
+        sb.append("-".repeat(MAX_AXIS_VALUE*2)).append(LINE_SEPARATOR);
+        for (int x = MIN_AXIS_VALUE; x < MAX_AXIS_VALUE; x++) {
+            appendXticks(x);
+        }
+    }
+
+    private void appendYTicks(int y) {
         if(y %2 == 0) {
             sb.append(String.format("%2d", y));
             return;
@@ -56,38 +61,47 @@ public class ResultView {
         sb.append(DOUBLE_BLANK);
     }
 
-    private void appendCoordinateOrPass(StringBuilder sb, int y) {
-        StringBuilder tmpSb = new StringBuilder();
-        if(coordinateDTO1.getY() == y && coordinateDTO2.getY() == y) {
-            tmpSb.append(DOUBLE_BLANK.repeat(coordinateDTO1.getX()))
-                    .append(POINT);
-            appendSecondCoordinateInSameY(tmpSb);
-            sb.append(tmpSb).append(LINE_SEPARATOR);
+    private void appendCoordinateOrPass(List<CoordinateDTO> coordinateDTOList, int y) {
+        CoordinateDTO coordinateDTO1 = coordinateDTOList.get(0);
+        CoordinateDTO coordinateDTO2 = coordinateDTOList.get(1);
+
+        if(coordinateDTO1.hasYOf(y) && coordinateDTO2.hasYOf(y)) {
+            sb.append(getStringOfTwoCoordinatesInSameY(coordinateDTO1, coordinateDTO2))
+                    .append(LINE_SEPARATOR);
             return;
         }
         if(coordinateDTO1.getY() == y) {
-            tmpSb.append(DOUBLE_BLANK.repeat(coordinateDTO1.getX()))
-                    .append(".");
+            sb.append(getStringOfSingleCoordinate(coordinateDTO1));
         }
         if(coordinateDTO2.getY() == y) {
-            tmpSb.append(DOUBLE_BLANK.repeat(coordinateDTO2.getX()))
-                    .append(POINT);
+            sb.append(getStringOfSingleCoordinate(coordinateDTO2));
         }
-        sb.append(tmpSb).append(LINE_SEPARATOR);
+        sb.append(LINE_SEPARATOR);
     }
 
-    private void appendXAxis(StringBuilder sb, int x) {
+    private String getStringOfSingleCoordinate(CoordinateDTO coordinateDTO) {
+        StringBuilder tmpSb = new StringBuilder();
+        return tmpSb.append(DOUBLE_BLANK.repeat(coordinateDTO.getX()))
+                .append(POINT).toString();
+    }
+
+    private String getStringOfTwoCoordinatesInSameY(CoordinateDTO coordinateDTO1, CoordinateDTO coordinateDTO2) {
+        StringBuilder tmpSb = new StringBuilder();
+        tmpSb.append(getStringOfSingleCoordinate(coordinateDTO1));
+        if(coordinateDTO1.getX() < coordinateDTO1.getX()) {
+            tmpSb.deleteCharAt(0).insert(coordinateDTO2.getX()*2, POINT);
+            return tmpSb.toString();
+        }
+        tmpSb.append("  ".repeat(coordinateDTO1.getX()- coordinateDTO2.getX()-1))
+                .append(" ").append(POINT);
+        return tmpSb.toString();
+    }
+
+    private void appendXticks(int x) {
         if(x%2 == 0) {
             sb.append(String.format("%4d", x));
         }
     }
 
-    private void appendSecondCoordinateInSameY(StringBuilder tmpSb) {
-        if(coordinateDTO2.getX() < coordinateDTO1.getX()) {
-            tmpSb.deleteCharAt(0).insert(coordinateDTO2.getX()*2, POINT);
-            return;
-        }
-        tmpSb.append("  ".repeat(coordinateDTO1.getX()- coordinateDTO2.getX()-1))
-                .append(" ").append(POINT);
-    }
+
 }

@@ -1,10 +1,7 @@
 package line;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Coordinates {
     private final List<Coordinate> coordinateList;
@@ -23,5 +20,14 @@ public class Coordinates {
 
     public boolean containsAll(Coordinate... coordinates) {
         return coordinateList.containsAll(List.of(coordinates));
+    }
+
+    public Stream<Coordinate> stream() {
+        return coordinateList.stream();
+    }
+
+    public double getLength() {
+        return coordinateList.get(0)
+                .calculateLengthTo(coordinateList.get(1));
     }
 }
