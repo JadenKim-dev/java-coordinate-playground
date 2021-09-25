@@ -1,5 +1,7 @@
 package line;
 
+import java.util.Objects;
+
 public class Coordinate {
 
     private final Value x;
@@ -27,5 +29,18 @@ public class Coordinate {
 
     public Value getY() {
         return Value.copyOf(y);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coordinate that = (Coordinate) o;
+        return Objects.equals(getX(), that.getX()) && Objects.equals(getY(), that.getY());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getX(), getY());
     }
 }

@@ -1,5 +1,7 @@
 package line;
 
+import java.util.Objects;
+
 public class Value {
 
     public static final int MIN_BOUND = 1;
@@ -15,10 +17,14 @@ public class Value {
     }
 
     public static Value of(int value) {
-        if(value < MIN_BOUND || value > MAX_BOUND) {
+        if(validateValue(value)) {
             throw new IllegalArgumentException("좌표값은 1에서 24 사이만 가능합니다.");
         }
         return new Value(value);
+    }
+
+    public static boolean validateValue(int value) {
+        return value < MIN_BOUND || value > MAX_BOUND;
     }
 
 
@@ -32,5 +38,18 @@ public class Value {
 
     int getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Value value1 = (Value) o;
+        return getValue() == value1.getValue();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getValue());
     }
 }

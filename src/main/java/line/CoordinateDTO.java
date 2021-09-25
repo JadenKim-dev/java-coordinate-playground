@@ -23,39 +23,6 @@ public class CoordinateDTO {
         return new CoordinateDTO(x, y);
     }
 
-    public static List<CoordinateDTO> parseCoordinateDTOs(String input) {
-        ArrayList<Integer> values = new ArrayList<>();
-
-        List<String> separatedInput = Arrays.stream(input.split(DELIMITER))
-                .map(substring -> substring.split(COMMA))
-                .flatMap(Arrays::stream).collect(Collectors.toList());
-
-        for (int i = 0; i < separatedInput.size(); i++) {
-            addIthValueFromInput(values, separatedInput, i);
-        }
-
-        return convertToCoordinateDTOs(values);
-    }
-
-    private static void addIthValueFromInput(ArrayList<Integer> values, List<String> separatedInput, int i) {
-        String partialInput = separatedInput.get(i);
-        if (i % 2 == 0) {
-            values.add(Integer.parseInt(partialInput.substring(1)));
-            return;
-        }
-        values.add(Integer.parseInt(partialInput.substring(0, partialInput.length() - 1)));
-    }
-
-    private static ArrayList<CoordinateDTO> convertToCoordinateDTOs(ArrayList<Integer> values) {
-        ArrayList<CoordinateDTO> coordinateDTOs = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            coordinateDTOs.add(
-                    CoordinateDTO.newInstance(values.get(2*i), values.get(2*i + 1))
-            );
-        }
-        return coordinateDTOs;
-    }
-
     public static CoordinateDTO from(Coordinate coordinate) {
         return new CoordinateDTO(
                 coordinate.getX().getValue(),
