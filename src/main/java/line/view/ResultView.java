@@ -1,7 +1,9 @@
-package line;
+package line.view;
+
+import line.controller.dto.CoordinateDTO;
+import line.domain.Coordinates;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ResultView {
 

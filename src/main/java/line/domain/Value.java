@@ -1,4 +1,4 @@
-package line;
+package line.domain;
 
 import java.util.Objects;
 
@@ -36,7 +36,7 @@ public class Value {
         return this.value - otherValue.value;
     }
 
-    int getValue() {
+    public int getValue() {
         return value;
     }
 

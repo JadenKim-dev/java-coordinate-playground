@@ -1,4 +1,4 @@
-package line;
+package line.view;
 
 import java.util.Scanner;
 

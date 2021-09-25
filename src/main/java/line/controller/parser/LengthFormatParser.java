@@ -1,4 +1,7 @@
-package line;
+package line.controller.parser;
+
+import line.domain.Coordinate;
+import line.domain.Coordinates;
 
 import java.util.ArrayList;
 import java.util.Arrays;

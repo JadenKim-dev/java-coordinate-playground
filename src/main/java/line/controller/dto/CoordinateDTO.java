@@ -1,7 +1,8 @@
-package line;
+package line.controller.dto;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import line.domain.Coordinate;
+import line.domain.Coordinates;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

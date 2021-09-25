@@ -1,4 +1,6 @@
-package line;
+package line.controller.parser;
+
+import line.domain.Coordinates;
 
 public interface CoordinatesParser {
     boolean validatePattern(String input);

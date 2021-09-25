@@ -1,4 +1,9 @@
-package line;
+package line.controller;
+
+import line.controller.parser.LengthFormatParser;
+import line.domain.Coordinates;
+import line.view.InputView;
+import line.view.ResultView;
 
 public class LengthCalculatorController {
     private final InputView inputView;

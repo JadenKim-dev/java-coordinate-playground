@@ -1,6 +1,7 @@
-package line;
+package line.domain;
 
 
+import line.domain.Value;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

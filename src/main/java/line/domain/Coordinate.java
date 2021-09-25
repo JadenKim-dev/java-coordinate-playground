@@ -1,4 +1,4 @@
-package line;
+package line.domain;
 
 import java.util.Objects;
 
